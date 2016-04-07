@@ -1,7 +1,7 @@
 FROM ubuntu:14.04
 
 ENV NPS_VERSION 1.11.33.0
-ENV NGINX_VERSION 1.9.13
+ENV NGINX_VERSION 1.9.14
 
 RUN \
 	apt-get update && \
