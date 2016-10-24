@@ -1,7 +1,6 @@
 FROM ubuntu:14.04
 
-ENV NPS_VERSION 1.11.33.3
-ENV NGINX_VERSION 1.10.1
+ENV NGINX_VERSION 1.10.2
 
 RUN \
 	apt-get update && \
@@ -17,7 +16,7 @@ RUN \
 RUN apt-get install -y zlib1g-dev libpcre3 libpcre3-dev libssl-dev libxml2-dev libxslt-dev libgd2-xpm-dev geoip-database libgeoip-dev
 
 RUN \
-	wget https://github.com/pagespeed/ngx_pagespeed/archive/release-${NPS_VERSION}-beta.zip && \
+	wget https://github.com/pagespeed/ngx_pagespeed/archive/latest-stable.zip && \
 	unzip release-${NPS_VERSION}-beta.zip && \
 	rm release-${NPS_VERSION}-beta.zip && \
 	cd ngx_pagespeed-release-${NPS_VERSION}-beta/ && \
