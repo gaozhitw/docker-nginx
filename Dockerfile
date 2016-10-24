@@ -1,6 +1,7 @@
 FROM ubuntu:14.04
 
 ENV NGINX_VERSION 1.10.2
+ENV NPS_VERSION latest-stable
 
 RUN \
 	apt-get update && \
@@ -16,11 +17,11 @@ RUN \
 RUN apt-get install -y zlib1g-dev libpcre3 libpcre3-dev libssl-dev libxml2-dev libxslt-dev libgd2-xpm-dev geoip-database libgeoip-dev
 
 RUN \
-	wget https://github.com/pagespeed/ngx_pagespeed/archive/latest-stable.zip && \
-	unzip release-${NPS_VERSION}-beta.zip && \
-	rm release-${NPS_VERSION}-beta.zip && \
-	cd ngx_pagespeed-release-${NPS_VERSION}-beta/ && \
-	wget https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz && \
+	wget https://github.com/pagespeed/ngx_pagespeed/archive/${NPS_VERSION}.zip && \
+	unzip ${NPS_VERSION}.zip && \
+	rm ${NPS_VERSION}.zip && \
+	cd ngx_pagespeed-${NPS_VERSION}/ && \
+	wget https://github.com/pagespeed/mod_pagespeed/archive/${NPS_VERSION}.tar.gz && \
 	tar -xzvf ${NPS_VERSION}.tar.gz && \
 	rm ${NPS_VERSION}.tar.gz && \
 	cd ../
