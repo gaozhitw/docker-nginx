@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
 ENV NPS_VERSION 1.11.33.4
 ENV NGINX_VERSION 1.10.2
@@ -9,7 +9,7 @@ RUN \
 	apt-get install -y build-essential software-properties-common curl git htop man unzip vim wget
 
 RUN \
-	add-apt-repository ppa:maxmind/ppa && \
+	add-apt-repository -y ppa:maxmind/ppa && \
 	apt-get install -y aptitude && \
 	aptitude update && \
 	aptitude install libmaxminddb0 libmaxminddb-dev mmdb-bin
