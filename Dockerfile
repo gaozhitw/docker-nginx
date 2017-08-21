@@ -1,7 +1,8 @@
 FROM ubuntu:16.04
 
-ENV NPS_VERSION 1.11.33.4
-ENV NGINX_VERSION 1.10.2
+ENV NPS_VERSION 1.12.34.2-stable
+ENV NPS_RELEASE_NUMBER 1.12.34.2-
+ENV NGINX_VERSION 1.12.1
 
 RUN \
 	apt-get update && \
@@ -17,13 +18,15 @@ RUN \
 RUN apt-get install -y zlib1g-dev libpcre3 libpcre3-dev libssl-dev libxml2-dev libxslt-dev libgd2-xpm-dev geoip-database libgeoip-dev
 
 RUN \
-	wget https://github.com/pagespeed/ngx_pagespeed/archive/release-${NPS_VERSION}-beta.zip && \
-	unzip release-${NPS_VERSION}-beta.zip && \
-	rm release-${NPS_VERSION}-beta.zip && \
-	cd ngx_pagespeed-release-${NPS_VERSION}-beta/ && \
-	wget https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz && \
-	tar -xzvf ${NPS_VERSION}.tar.gz && \
-	rm ${NPS_VERSION}.tar.gz && \
+	wget https://github.com/pagespeed/ngx_pagespeed/archive/v${NPS_VERSION}.zip && \
+	unzip v${NPS_VERSION}.zip && \
+	rm v${NPS_VERSION}.zip && \
+	cd ngx_pagespeed-${NPS_VERSION}/ && \
+	psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_RELEASE_NUMBER}.tar.gz [ -e scripts/format_binary_url.sh ] && \
+	psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL) && \
+	wget ${psol_url} && \
+	tar -xzvf $(basename ${psol_url}) && \
+	rm $(basename ${psol_url}) && \
 	cd ../
 
 RUN git clone https://github.com/leev/ngx_http_geoip2_module.git
@@ -33,7 +36,7 @@ RUN \
 	tar -xvzf nginx-${NGINX_VERSION}.tar.gz && \
 	rm -rf nginx-${NGINX_VERSION}.tar.gz && \
 	cd nginx-${NGINX_VERSION}/ && \
-    ./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/etc/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_geoip_module=dynamic --with-threads --with-stream --with-stream_ssl_module --with-http_slice_module --with-mail --with-mail_ssl_module --with-file-aio --with-http_v2_module --with-ipv6 --add-dynamic-module=/ngx_http_geoip2_module --add-dynamic-module=/ngx_pagespeed-release-${NPS_VERSION}-beta && \
+    ./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/etc/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_geoip_module=dynamic --with-threads --with-stream --with-stream_ssl_module --with-http_slice_module --with-mail --with-mail_ssl_module --with-file-aio --with-http_v2_module --with-ipv6 --add-dynamic-module=/ngx_http_geoip2_module --add-dynamic-module=/ngx_pagespeed-${NPS_VERSION} ${PS_NGX_EXTRA_FLAGS} && \
 	make && \
 	make install && \
 	cd ../
