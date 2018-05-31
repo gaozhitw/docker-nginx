@@ -40,7 +40,7 @@ RUN \
 	tar -xvzf nginx-${NGINX_VERSION}.tar.gz && \
 	rm -rf nginx-${NGINX_VERSION}.tar.gz && \
 	cd nginx-${NGINX_VERSION}/ && \
-    ./configure --prefix=/etc/nginx \
+	./configure --prefix=/etc/nginx \
 	--sbin-path=/usr/sbin/nginx \
 	--modules-path=/etc/nginx/modules \
 	--conf-path=/etc/nginx/nginx.conf \
